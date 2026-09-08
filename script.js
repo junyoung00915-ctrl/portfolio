@@ -1,0 +1,13 @@
+const data={name:"최준영",intro:"IT와 프로그래밍을 공부하고 있는 학생입니다.",school:"선린인터넷고등학교 1학년",interest:"프로그래밍, 정보보안",about:"프로그래밍과 정보보안에 관심이 있어서 여러 가지를 직접 만들어 보고 있습니다.\n아직 부족하지만 공부한 내용을 기록하면서 조금씩 실력을 키우고 있습니다.",skills:["Python","C","HTML / CSS","JavaScript"],projects:[{title:"포트폴리오 사이트",desc:"HTML, CSS, JavaScript를 사용해서 직접 만든 포트폴리오 사이트입니다."},{title:"C 언어 프로젝트",desc:"C 언어를 공부하면서 만든 프로그램입니다."}],activities:[{date:"2026",title:"교내 프로젝트",desc:"친구들과 프로젝트를 만들고 발표했습니다."},{date:"2026",title:"보안 공부",desc:"웹 해킹과 프로그래밍을 공부하고 있습니다."}]};
+const collections=[];
+const $=id=>document.getElementById(id);
+function escapeHtml(text){return String(text||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
+function render(){
+$("name").textContent=data.name;$("intro").textContent=data.intro;$("school").textContent=data.school;$("interest").textContent=data.interest;$("aboutText").textContent=data.about;
+$("skillsList").innerHTML=data.skills.map(x=>`<span class="skill">${escapeHtml(x)}</span>`).join("");
+$("projectsList").innerHTML=data.projects.map((x,i)=>`<div class="project"><small>PROJECT ${i+1}</small><h3>${escapeHtml(x.title)}</h3><p>${escapeHtml(x.desc)}</p></div>`).join("");
+$("activitiesList").innerHTML=data.activities.map(x=>`<div class="activity"><b>${escapeHtml(x.date)}</b><h3>${escapeHtml(x.title)}</h3><p>${escapeHtml(x.desc)}</p></div>`).join("");
+$("collectionsList").innerHTML=collections.length?collections.map((c,i)=>`<button class="collection-card" onclick="openCollection(${i})"><div class="collection-cover">${c.pages[0]?`<img src="${c.pages[0]}" alt="">`:'<span>📚</span>'}</div><div class="collection-info"><h3>${escapeHtml(c.title)}</h3><p>${c.pages.length}페이지</p><span>자료 보기 →</span></div></button>`).join(""):'<p class="empty-file">아직 올린 자료가 없습니다.</p>';
+}
+function openCollection(i){const c=collections[i];$("galleryTitle").textContent=c.title;$("galleryImages").innerHTML=c.pages.map((page,idx)=>`<div class="gallery-page"><img src="${page}" alt="${escapeHtml(c.title)} ${idx+1}페이지"><p>${idx+1}</p></div>`).join("");$("galleryModal").classList.add("show");document.body.style.overflow="hidden";}window.openCollection=openCollection;
+function closeGallery(){$("galleryModal").classList.remove("show");document.body.style.overflow="";}$("galleryClose").onclick=closeGallery;$("galleryModal").onclick=e=>{if(e.target===$("galleryModal"))closeGallery();};render();
